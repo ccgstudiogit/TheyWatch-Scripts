@@ -8,5 +8,5 @@ Many systems that I created were refactored mid-development as I continued to le
 a stronger foundation in writing scalable code and have a better idea of what patterns to use and where.
 
 Moving forward, I plan to place a greater emphasis on scalability, reusability, and debuggability from the start. Working through They Watch helped highlight areas
-where earlier decisions created unncessary complexity, and those experiences helped to change how I intend to approach future projects with cleaner structure and
-more intentional design.
+where earlier decisions created unncessary complexity, and these experiences have shaped how I intend to approach future projects with cleaner structure and more
+intentional design.
