@@ -1,6 +1,9 @@
 # TheyWatch-Scripts
 These are the scripts for my mini horror game, They Watch. These scripts are provided for portfolio and educational review.
 
+# Development Timeline
+January 2025 - November 2025 (officially released on steam Nov. 19th)
+
 # Development Reflection
 
 Over the course of developing this project, I significantly improved my understanding of Unity's workflow as well as software architecture and design principles.
