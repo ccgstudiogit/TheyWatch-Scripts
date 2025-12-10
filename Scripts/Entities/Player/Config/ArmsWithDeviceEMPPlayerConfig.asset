@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3f327e2a4869014e992a1332b6b448a, type: 3}
+  m_Name: ArmsWithDeviceEMPPlayerConfig
+  m_EditorClassIdentifier: 
+  _armsPrefab: {fileID: 8702385744655952987, guid: f39b4d22b19b79f47a9174ff151f5745, type: 3}
+  _armsAnimatorController: {fileID: 9100000, guid: b7293d9c39b23aa46acad4b9bdd3a617, type: 2}
+  includeCollectableSight: 0
+  includeFlashlight: 1
+  includeCheckDevice: 1
+  includeEMP: 1
