@@ -7,8 +7,8 @@ January 2025 - November 2025 (officially released on steam on Nov. 19th)
 # Development Reflection
 Over the course of developing this project, I significantly improved my understanding of Unity's workflow as well as software architecture and design principles. Many
 of the systems I created--player interactions, inventory management, enemy AI, scene loading, input handling, and more--went through multiple refactors as I continued to
-learn about architecture patterns, event-driven design, and separation of responsibilities mid-project. Through this process, I became much more comfortable with inheritance,
-composition, and C# events.
+learn about architecture patterns, event-driven design, and separation of responsibilities mid-project. Through this process, I became much more comfortable with concepts
+like inheritance, composition, interfaces, state machines, and C# events.
 
 This project was also much, much bigger in scope than my previous projects, which led me to handling challenges such as managing cross-scene communication, handling player
 data, organizing a large number of scripts, and structuring gameplay logic in a way that remainded stable throughout feature additions. Although programming was the primary
