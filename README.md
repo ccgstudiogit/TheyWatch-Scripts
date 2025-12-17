@@ -7,7 +7,7 @@ January 2025 - November 2025 (officially released on steam on Nov. 19th)
 # About the Project
 They Watch is an arcade-style, maze based horror game where the player spawns in a maze and must collect all of the runestones to open the portal and escape the map. Each
 maze contains its own entities with different behaviors and counters, and each map also has a hard-mode where there are more runestones and an additional mechanic the
-player must worry about.
+player must worry about. The player has a radar device that they can use to locate the scattered runestones.
 
 # Development Reflection
 Over the course of developing this project, I significantly improved my understanding of Unity's workflow as well as software architecture and design principles. Many
@@ -25,4 +25,4 @@ Moving forward, I plan to place an even greater emphasis on scalability, reusabi
 helped highlight areas where earlier decisions created unncessary complexity, and these lessons will help me approach future projects with a cleaner and more deliberate
 structure.
 
-I did not include any gifs/pictures since the steam page is public: 
+I did not include any gifs/pictures since the [steam page](https://store.steampowered.com/app/3879000/They_Watch/) is public.
