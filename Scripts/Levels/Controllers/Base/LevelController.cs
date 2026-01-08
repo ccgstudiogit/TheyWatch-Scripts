@@ -160,7 +160,7 @@ public abstract class LevelController : MonoBehaviour
     /// <returns>The player game object (or null if there currently is no player game object).</returns>
     public GameObject GetPlayer()
     {
-        return spawnPlayerHandler.player != null ? spawnPlayerHandler.player : null;
+        return spawnPlayerHandler.player;
     }
 
     /// <summary>
@@ -169,6 +169,18 @@ public abstract class LevelController : MonoBehaviour
     public void BeginFullscreenDistortionOnPlayerDeath()
     {
         deathscreenDistortionHandler.BeginFullscreenDistortion();
+    }
+    
+    /// <summary>
+    ///     Temporarily active the fullscreen distortion effect.
+    /// </summary>
+    /// <param name="toDuration">How long it takes for the target intensity and saturation to be reached.</param>
+    /// <param name="fromDuration">How long it takes for the intensity and saturation to be set to 0 and 1, respectively.</param>
+    /// <param name="intensity">The target intensity (on a scale of 0-1, 1 == max intensity, 0 == no intensity).</param>
+    /// <param name="saturation">The target saturation (1 == fully saturated, 0 == no saturation, black and white).</param>
+    public void TemporaryFullscreenDistortion(float toDuration, float fromDuration, float intensity = 1, float saturation = 0)
+    {
+        StartCoroutine(deathscreenDistortionHandler.TemporaryFullscreenDistortion(intensity, saturation, toDuration, fromDuration));
     }
 
     /// <summary>

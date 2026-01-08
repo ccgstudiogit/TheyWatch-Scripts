@@ -27,7 +27,7 @@ public class StitchEndScene : Monster, IIdleStateUser
         startState = idleState;
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         if (monster != this)
         {

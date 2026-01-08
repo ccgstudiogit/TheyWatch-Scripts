@@ -2,6 +2,10 @@ using UnityEngine;
 
 public abstract class Monster : Entity
 {
+    [Header("Damage Dealt To Player")]
+    [Tooltip("The damage this monster does to the player on contact")]
+    [SerializeField] private int damage = 50;
+
     protected abstract EntityState _startState { get; }
     protected override EntityState _startingState => _startState;
 
@@ -20,12 +24,14 @@ public abstract class Monster : Entity
 
     protected virtual void OnEnable()
     {
-        PlayerCollisions.OnPlayerCollidedWithMonster += HandleOnMonsterCollidedWithPlayer;
+        PlayerCollisions.OnPlayerDeath += HandleKillPlayer;
+        PlayerCollisions.OnPlayerTakesDamage += HandleDamagePlayer;
     }
 
     protected virtual void OnDisable()
     {
-        PlayerCollisions.OnPlayerCollidedWithMonster -= HandleOnMonsterCollidedWithPlayer;
+        PlayerCollisions.OnPlayerDeath -= HandleKillPlayer;
+        PlayerCollisions.OnPlayerTakesDamage -= HandleDamagePlayer;
     }
 
     protected override void Update()
@@ -33,7 +39,8 @@ public abstract class Monster : Entity
         base.Update();
     }
 
-    protected abstract void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster);
+    protected abstract void HandleKillPlayer(PlayerReferences playerReferences, Monster monster);
+    protected virtual void HandleDamagePlayer(Monster monster) { }
 
     /// <summary>
     ///     Switch a state's behavior.
@@ -41,5 +48,13 @@ public abstract class Monster : Entity
     protected void SwitchStateBehavior<T>(ref T currentState, T newBehavior) where T : EntityState
     {
         currentState = newBehavior;
+    }
+
+    /// <summary>
+    ///     Get this monster's damage.
+    /// </summary>
+    public int GetDamage()
+    {
+        return damage;
     }
 }

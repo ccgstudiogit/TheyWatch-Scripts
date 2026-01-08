@@ -78,7 +78,7 @@ public class Glunny : Monster, IIdleStateUser, IPatrolStateUser, IChaseStateUser
         MonitorTimeSearchingForPlayer();
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         if (monster != this)
         {
@@ -88,6 +88,8 @@ public class Glunny : Monster, IIdleStateUser, IPatrolStateUser, IChaseStateUser
         // This only stops movement. Deathscreen jumpscare sfx and logic is handled by DeathscreenJumpscare
         stateMachine.ChangeState(caughtPlayerState);
     }
+
+    protected override void HandleDamagePlayer(Monster monster) { }
 
     private void HandleOnPlayerSeen()
     {

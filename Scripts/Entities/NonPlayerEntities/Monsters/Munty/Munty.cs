@@ -17,8 +17,6 @@ public class Munty : Monster
         base.Start();
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
-    {
-        
-    }
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster) { }
+    protected override void HandleDamagePlayer(Monster monster) { }
 }

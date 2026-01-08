@@ -113,6 +113,7 @@ public abstract class Entity : MonoBehaviour
     public void Teleport(Vector3 position)
     {
         agent.Warp(position);
+        SetDestination(position);
     }
 
     /// <summary>
@@ -262,7 +263,7 @@ public abstract class Entity : MonoBehaviour
     ///     Check whether this entity is in a specific state.
     /// </summary>
     /// <returns>True if inThisState is equal to this entity's current state.</returns>
-    protected bool IsEntityInSpecificState(EntityState inThisState)
+    public bool IsEntityInSpecificState(EntityState inThisState)
     {
         return inThisState != null && stateMachine.currentEntityState == inThisState;
     }

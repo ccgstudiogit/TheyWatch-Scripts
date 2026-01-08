@@ -8,11 +8,6 @@ public abstract class RetreatState : EntityWayPointState
 
     protected WayPoint wayPointToMoveTo;
 
-    public override void EnterState()
-    {
-        base.EnterState();
-    }
-
     public override void ExitState()
     {
         base.ExitState();

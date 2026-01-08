@@ -19,66 +19,14 @@ public class OldLevelController : MonoBehaviour //DestroyWhenBackInMainMenu Old 
     private LevelDataSO data; // The actual data that the level needs
 
     private int collectablesRemaining;
-    /*
-    private static LevelController _instance;
-    public static LevelController instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                GameObject prefab = Resources.Load<GameObject>("Singletons/LevelController");
-                if (prefab == null)
-                {
-                    Debug.LogError("Could not instantiate LevelController as the prefab could not be found in Resources/Singletons/.");
-                    return null;
-                }
-
-                GameObject inScene = Instantiate(prefab);
-
-                _instance = inScene.GetComponent<LevelController>();
-                if (_instance == null)
-                    inScene.AddComponent<LevelController>();
-
-                DontDestroyOnLoad(_instance.transform.root.gameObject);
-            }
-
-            return _instance;
-        }
-    }
-    */
+    
     private void Start()
     {
         AdditivelyLoadScenes(scenesToLoad);
         FindLevelData(); // Searches for the LevelData gameobject that holds this scene's specific LevelDataSO
         InitLevelData();
     }
-    /*
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-
-        //UniversalPlayerInput.OnPause += HandleOnPausePressed;
-
-        Collectable.OnCollected += CollectableCollected;
-    }
-
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-
-        //UniversalPlayerInput.OnPause -= HandleOnPausePressed;
-
-        Collectable.OnCollected -= CollectableCollected;
-    }
-
-    protected override void OnDestroy()
-    {
-        // Set LevelController instance to null (this should only happen when leaving the game scenes to go to the main menu) as
-        // LevelController will be destroyed if the player loads back into the main menu (as this inherits from DestroyWhenBackInMainMenu)
-        //_instance = null;
-    }
-    */
+    
     private void AdditivelyLoadScenes(SceneName[] scenes)
     {
         if (scenes.Length < 1)

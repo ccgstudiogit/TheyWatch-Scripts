@@ -132,7 +132,7 @@ public class ScraplingEndScene : Monster, IIdleStateUser, IChaseStateUser, ICaug
         footstepSFX.Play(footstepSource);
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         stateMachine.ChangeState(caughtPlayerState);
     }

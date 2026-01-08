@@ -3,32 +3,20 @@ using UnityEngine;
 
 public class PlayerCollisions : MonoBehaviour
 {
-    public static event Action<PlayerReferences, Monster> OnPlayerCollidedWithMonster;
+    public static event Action<PlayerReferences, Monster> OnPlayerDeath; // Player's health reaches 0. PlayerReferences is sent so player input is disabled
+    public static event Action<Monster> OnPlayerTakesDamage;
 
     private PlayerInventory playerInventory;
     private PlayerReferences playerReferences; // Used to pass references to the monster that collided with the player
+    private PlayerHealth playerHealth;
 
     private bool escaping;
 
     private void Awake()
     {
         playerReferences = GetComponent<PlayerReferences>();
-#if UNITY_EDITOR
-        if (playerReferences == null)
-        {
-            Debug.LogWarning("PlayerCollisions.cs is unable to find PlayerReferences component. " +
-                "Unable to invoke OnPlayerCollidedWithMonster event action.");
-        }
-#endif
-
         playerInventory = GetComponent<PlayerInventory>();
-#if UNITY_EDITOR
-        if (playerInventory == null)
-        {
-            Debug.LogWarning("PlayerCollisions.cs is unable to find PlayerInventory component. " +
-                "Unable to add collectables to inventory.");
-        }
-#endif
+        playerHealth = GetComponent<PlayerHealth>();
     }
 
     private void OnEnable()
@@ -97,9 +85,39 @@ public class PlayerCollisions : MonoBehaviour
             return;
         }
 
-        OnPlayerCollidedWithMonster?.Invoke(playerReferences, monster);
+        // Don't take damage if the monster is retreating
+        if (monster is IRetreatStateUser)
+        {
+            IRetreatStateUser retreatStateUser = monster as IRetreatStateUser;
+
+            if (monster.IsEntityInSpecificState(retreatStateUser.retreatState))
+            {
+                return;
+            }
+        }
+
+        int damageToTake = monster.GetDamage();
+        playerHealth.TakeDamage(damageToTake);
+
+        if (playerHealth.GetHealth() <= 0)
+        {
+            OnPlayerDeath?.Invoke(playerReferences, monster);
+        }
+        else
+        {
+            OnPlayerTakesDamage?.Invoke(monster);
+
+            playerHealth.PlayDistortion();
+            playerHealth.PlayImpactSFX();
+            playerHealth.PlayScreenShake();
+            playerHealth.ActivateBloodEffect();
+        }
     }
 
+    /// <summary>
+    ///     Prevents edge-case scenarios where the player is escaping via the portal, but the maze's entity touches the player before
+    ///     fully escaping via the portal causing the escape and jumpscare lose sequence to both play out, creating unexpected behavior.
+    /// </summary>
     private void HandlePlayerEscaped()
     {
         escaping = true;

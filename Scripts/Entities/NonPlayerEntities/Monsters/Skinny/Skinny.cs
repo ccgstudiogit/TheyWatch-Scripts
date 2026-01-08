@@ -110,7 +110,7 @@ public class Skinny : Monster, IIdleStateUser, IPatrolStateUser, IInvestigateSta
         }
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         if (monster != this)
         {
@@ -120,6 +120,8 @@ public class Skinny : Monster, IIdleStateUser, IPatrolStateUser, IInvestigateSta
         // This only stops movement. Deathscreen jumpscare sfx and logic is handled by DeathscreenJumpscare
         stateMachine.ChangeState(caughtPlayerState);
     }
+
+    protected override void HandleDamagePlayer(Monster monster) { }
 
     private void HandlePlayerSeen()
     {

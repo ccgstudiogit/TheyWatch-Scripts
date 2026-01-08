@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 // DO NOT USE ** LEAVING THIS SCRIPT IN THE PROJECT FOR POSSIBLE FUTURE REFERENCE
+// THIS SCRIPT HAS BEEN SEPARATED INTO MULTIPLE COMPONENTS
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {

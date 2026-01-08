@@ -70,6 +70,7 @@ public class SoundEffectSO : ScriptableObject
         audioSource.clip = GetAudioClip();
         audioSource.volume = Random.Range(clipVolume.x, clipVolume.y);
         audioSource.pitch = Random.Range(pitch.x, pitch.y);
+        audioSource.dopplerLevel = 0;
 
         audioSource.Play();
 

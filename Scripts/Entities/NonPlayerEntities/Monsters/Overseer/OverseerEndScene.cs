@@ -140,7 +140,7 @@ public class OverseerEndScene : Monster, IIdleStateUser, IChaseStateUser, ICaugh
         }
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         stateMachine.ChangeState(caughtPlayerState);
     }

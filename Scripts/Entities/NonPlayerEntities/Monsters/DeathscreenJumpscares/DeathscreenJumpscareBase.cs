@@ -46,12 +46,12 @@ public abstract class DeathscreenJumpscareBase : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        PlayerCollisions.OnPlayerCollidedWithMonster += HandleDeathscreenJumpscare;
+        PlayerCollisions.OnPlayerDeath += HandleDeathscreenJumpscare;
     }
 
     protected virtual void OnDisable()
     {
-        PlayerCollisions.OnPlayerCollidedWithMonster -= HandleDeathscreenJumpscare;
+        PlayerCollisions.OnPlayerDeath -= HandleDeathscreenJumpscare;
     }
 
     protected abstract void HandleDeathscreenJumpscare(PlayerReferences playerReferences, Monster monster);

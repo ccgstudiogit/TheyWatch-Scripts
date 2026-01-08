@@ -367,7 +367,7 @@ public class Somnid : Monster, ISleepStateUser, IIdleStateUser, IChaseStateUser,
     }
 #endif
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         if (lookAtTargetOnce != null)
         {
@@ -384,4 +384,6 @@ public class Somnid : Monster, ISleepStateUser, IIdleStateUser, IChaseStateUser,
             Freeze();
         }
     }
+
+    protected override void HandleDamagePlayer(Monster monster) { }
 }

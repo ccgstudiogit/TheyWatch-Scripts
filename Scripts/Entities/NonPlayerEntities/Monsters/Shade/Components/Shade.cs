@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Shade : Monster, IStalkStateUser, IRetreatStateUser, IChaseStateUser, ICaughtPlayerStateUser, IIdleStateUser
+public class Shade : Monster, IStalkStateUser, IRetreatStateUser, IChaseStateUser, ICaughtPlayerStateUser, IIdleStateUser, IDisappearStateUser
 {
     private StalkState _stalkState;
     public StalkState stalkState => _stalkState;
@@ -18,6 +18,9 @@ public class Shade : Monster, IStalkStateUser, IRetreatStateUser, IChaseStateUse
     private IdleState _idleState;
     public IdleState idleState => _idleState;
 
+    private DisappearState _disappearState;
+    public DisappearState disappearState => _disappearState;
+
     private EntityState startState;
     protected override EntityState _startState => startState;
 
@@ -29,6 +32,7 @@ public class Shade : Monster, IStalkStateUser, IRetreatStateUser, IChaseStateUse
     [SerializeField] private CaughtPlayerState caughtPlayerBehavior;
     [SerializeField] private IdleState idleStateBehavior;
     [SerializeField] private IdleDoNothing idleDoNothingBehavior;
+    [SerializeField] private DisappearState disappearBehavior;
 
     [Header("Sound Effects")]
     [SerializeField] private SoundEffectSO footstepSFX;
@@ -100,6 +104,7 @@ public class Shade : Monster, IStalkStateUser, IRetreatStateUser, IChaseStateUse
         _chaseState = chaseStateBehavior;
         _caughtPlayerState = caughtPlayerBehavior;
         _idleState = idleStateBehavior;
+        _disappearState = disappearBehavior;
 
         startState = stalkState;
     }
@@ -240,7 +245,7 @@ public class Shade : Monster, IStalkStateUser, IRetreatStateUser, IChaseStateUse
         stateMachine.ChangeState(chaseState);
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         // If Shade is retreating or invisible, don't do anything when colliding with the player
         if (monster != this || IsEntityInSpecificState(retreatState) || !rendererHandler.bodyMeshRenderer.enabled)
@@ -250,6 +255,32 @@ public class Shade : Monster, IStalkStateUser, IRetreatStateUser, IChaseStateUse
 
         // This only stops movement. Deathscreen jumpscare sfx and logic is handled by DeathscreenJumpscare
         stateMachine.ChangeState(caughtPlayerState);
+    }
+
+    protected override void HandleDamagePlayer(Monster monster)
+    {
+        if (monster == this)
+        {
+            if (HelperMethods.NotNullAndEnabled(berserkHandler) && berserkHandler.currentlyBerserk)
+            {
+                // Swap chase state back to the base chase state behavior and retreat
+                SwitchStateBehavior(ref _chaseState, chaseStateBehavior);
+
+                berserkHandler.ExitBerserk();
+
+                if (monsterSight != null)
+                {
+                    monsterSight.enabled = true;
+                }
+
+                if (flashlightDetector != null)
+                {
+                    flashlightDetector.enabled = true;
+                }
+            }
+
+            stateMachine.ChangeState(disappearState);
+        }
     }
 
     public void FootstepEvent()

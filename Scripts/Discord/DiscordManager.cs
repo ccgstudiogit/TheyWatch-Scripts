@@ -8,8 +8,17 @@ public class DiscordManager : MonoBehaviour
 
     private void Start()
     {
-        discord = new Discord.Discord(clientId, (ulong)Discord.CreateFlags.NoRequireDiscord);
-        ChangeActivity();
+        try
+        {
+            discord = new Discord.Discord(clientId, (ulong)Discord.CreateFlags.NoRequireDiscord);
+            ChangeActivity();
+        }
+        catch
+        {
+#if UNITY_EDITOR
+            Debug.LogWarning("Error setting up discord client");
+#endif
+        }
     }
 
     private void OnApplicationQuit()

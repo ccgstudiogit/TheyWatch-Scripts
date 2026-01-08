@@ -16,13 +16,13 @@ public class FactoryEndLevelController : LevelController
     protected override void OnEnable()
     {
         base.OnEnable();
-        PlayerCollisions.OnPlayerCollidedWithMonster += EndLevel;
+        PlayerCollisions.OnPlayerDeath += EndLevel;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        PlayerCollisions.OnPlayerCollidedWithMonster -= EndLevel;
+        PlayerCollisions.OnPlayerDeath -= EndLevel;
     }
 
     /// <summary>

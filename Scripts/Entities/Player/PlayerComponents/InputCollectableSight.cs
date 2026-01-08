@@ -16,7 +16,7 @@ public class InputCollectableSight : PlayerInput
             playerActions.Base.CollectableSight.canceled += OnCollectableSightCanceled;
         }
 
-        PlayerCollisions.OnPlayerCollidedWithMonster += HandlePlayerCollidedWithMonster;
+        PlayerCollisions.OnPlayerDeath += HandlePlayerCollidedWithMonster;
     }
 
     protected override void OnDisable()
@@ -27,7 +27,7 @@ public class InputCollectableSight : PlayerInput
             playerActions.Base.CollectableSight.canceled -= OnCollectableSightCanceled;
         }
 
-        PlayerCollisions.OnPlayerCollidedWithMonster -= HandlePlayerCollidedWithMonster;
+        PlayerCollisions.OnPlayerDeath -= HandlePlayerCollidedWithMonster;
     }
 
     protected override void Start()

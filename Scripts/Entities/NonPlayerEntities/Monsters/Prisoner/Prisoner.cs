@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
-public class Prisoner : Monster, IIdleStateUser, IStalkStateUser, ISearchStateUser, IChaseStateUser, ICaughtPlayerStateUser
+public class Prisoner : Monster, IIdleStateUser, IStalkStateUser, ISearchStateUser, IChaseStateUser, ICaughtPlayerStateUser, IDisappearStateUser
 {
     private IdleState _idleState;
     public IdleState idleState => _idleState;
@@ -18,6 +17,9 @@ public class Prisoner : Monster, IIdleStateUser, IStalkStateUser, ISearchStateUs
 
     private CaughtPlayerState _caughtPlayerState;
     public CaughtPlayerState caughtPlayerState => _caughtPlayerState;
+
+    private DisappearState _disappearState;
+    public DisappearState disappearState => _disappearState;
 
     private EntityState startState;
     protected override EntityState _startState => startState;
@@ -43,6 +45,7 @@ public class Prisoner : Monster, IIdleStateUser, IStalkStateUser, ISearchStateUs
     [SerializeField] private SearchState searchBehavior;
     [SerializeField] private ChaseState chaseBehavior;
     [SerializeField] private CaughtPlayerState caughtPlayerBehavior;
+    [SerializeField] private DisappearState disappearBehavior;
 
     [Header("Cowering")]
     [Tooltip("When cowering, this prisoner will remain cowering between this amount of time")]
@@ -103,6 +106,7 @@ public class Prisoner : Monster, IIdleStateUser, IStalkStateUser, ISearchStateUs
         _searchState = searchBehavior;
         _chaseState = chaseBehavior;
         _caughtPlayerState = caughtPlayerBehavior;
+        _disappearState = disappearBehavior;
 
         startState = behavior switch
         {
@@ -417,7 +421,7 @@ public class Prisoner : Monster, IIdleStateUser, IStalkStateUser, ISearchStateUs
         }
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         /// The reason Prisoner doesn't check if the monster that caught the player is this prisoner is because since there will be
         /// multiple prisoners in Dungeon HM, all prisoners should stop moving if one catches the player to make sure that another
@@ -427,6 +431,14 @@ public class Prisoner : Monster, IIdleStateUser, IStalkStateUser, ISearchStateUs
 
         // This only stops movement. Deathscreen jumpscare sfx and logic is handled by DeathscreenJumpscare
         stateMachine.ChangeState(caughtPlayerState);
+    }
+
+    protected override void HandleDamagePlayer(Monster monster)
+    {
+        if (monster == this)
+        {
+            stateMachine.ChangeState(disappearState);
+        }
     }
 
     /// <summary>

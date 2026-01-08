@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Scrapling : Monster, IIdleStateUser, ISleepStateUser, ISearchStateUser, IFreezeStateUser, IChaseStateUser, IStunStateUser, ICaughtPlayerStateUser
+public class Scrapling : Monster, IIdleStateUser, ISleepStateUser, ISearchStateUser, IFreezeStateUser, IChaseStateUser, IStunStateUser, ICaughtPlayerStateUser, IDisappearStateUser
 {
     private IdleState _idleState;
     public IdleState idleState => _idleState;
@@ -23,6 +23,9 @@ public class Scrapling : Monster, IIdleStateUser, ISleepStateUser, ISearchStateU
     private CaughtPlayerState _caughtPlayerState;
     public CaughtPlayerState caughtPlayerState => _caughtPlayerState;
 
+    private DisappearState _disappearState;
+    public DisappearState disappearState => _disappearState;
+
     private EntityState startState;
     protected override EntityState _startState => startState;
 
@@ -38,6 +41,7 @@ public class Scrapling : Monster, IIdleStateUser, ISleepStateUser, ISearchStateU
     [SerializeField] private ChaseState chaseBehavior;
     [SerializeField] private StunState stunBehavior;
     [SerializeField] private CaughtPlayerState caughtPlayerBehavior;
+    [SerializeField] private DisappearState disappearBehavior;
 
     [Header("Component References")]
     [SerializeField] private Collider col;
@@ -100,6 +104,7 @@ public class Scrapling : Monster, IIdleStateUser, ISleepStateUser, ISearchStateU
         _chaseState = chaseBehavior;
         _stunState = stunBehavior;
         _caughtPlayerState = caughtPlayerBehavior;
+        _disappearState = disappearBehavior;
 
         startState = sleepState;
 
@@ -429,9 +434,17 @@ public class Scrapling : Monster, IIdleStateUser, ISleepStateUser, ISearchStateU
         col.isTrigger = isTrigger;
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         // This only stops movement. Deathscreen jumpscare sfx and logic is handled by DeathscreenJumpscare
         stateMachine.ChangeState(caughtPlayerState);
+    }
+
+    protected override void HandleDamagePlayer(Monster monster)
+    {
+        if (monster == this)
+        {
+            stateMachine.ChangeState(disappearState);
+        }
     }
 }

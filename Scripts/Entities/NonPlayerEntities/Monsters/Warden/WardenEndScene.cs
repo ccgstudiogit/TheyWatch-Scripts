@@ -35,7 +35,7 @@ public class WardenEndScene : Monster, IIdleStateUser, IChaseStateUser
         startState = chaseState;
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         if (LevelController.instance != null && LevelController.instance is DungeonEndLevelController)
         {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Stitch : Monster, IIdleStateUser, IChaseStateUser, IStalkStateUser, IRetreatStateUser, ICaughtPlayerStateUser
+public class Stitch : Monster, IIdleStateUser, IChaseStateUser, IStalkStateUser, IRetreatStateUser, ICaughtPlayerStateUser, IDisappearStateUser
 {
     private IdleState _idleState;
     public IdleState idleState => _idleState;
@@ -17,6 +17,9 @@ public class Stitch : Monster, IIdleStateUser, IChaseStateUser, IStalkStateUser,
     private CaughtPlayerState _caughtPlayerState;
     public CaughtPlayerState caughtPlayerState => _caughtPlayerState;
 
+    private DisappearState _disappearState;
+    public DisappearState disappearState => _disappearState;
+
     private EntityState startState;
     protected override EntityState _startState => startState;
 
@@ -29,6 +32,7 @@ public class Stitch : Monster, IIdleStateUser, IChaseStateUser, IStalkStateUser,
     [SerializeField] private StalkState stalkPlayerBehavior;
     [SerializeField] private RetreatState retreatBehavior;
     [SerializeField] private CaughtPlayerState caughtPlayerBehavior;
+    [SerializeField] private DisappearState disappearBehavior;
 
     [Header("Flash Resistance Settings")]
     [Tooltip("If enabled, Stitch's flash resistence every [flashIncreaseInterval] times scared away")]
@@ -77,6 +81,7 @@ public class Stitch : Monster, IIdleStateUser, IChaseStateUser, IStalkStateUser,
         _stalkState = stalkPlayerBehavior;
         _retreatState = retreatBehavior;
         _caughtPlayerState = caughtPlayerBehavior;
+        _disappearState = disappearBehavior;
 
         startState = stalkState;
     }
@@ -194,7 +199,7 @@ public class Stitch : Monster, IIdleStateUser, IChaseStateUser, IStalkStateUser,
         }
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         if (monster != this || IsEntityInSpecificState(retreatState))
         {
@@ -203,6 +208,14 @@ public class Stitch : Monster, IIdleStateUser, IChaseStateUser, IStalkStateUser,
 
         // This only stops movement. Deathscreen jumpscare sfx and logic is handled by DeathscreenJumpscare
         stateMachine.ChangeState(caughtPlayerState);
+    }
+
+    protected override void HandleDamagePlayer(Monster monster)
+    {
+        if (monster == this)
+        {
+            stateMachine.ChangeState(disappearState);
+        }
     }
 
     /// <summary>

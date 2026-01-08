@@ -7,7 +7,7 @@ using Unity.Cinemachine;
 using UnityEditor;
 #endif
 
-public class Warden : Monster, IIdleStateUser, ISearchStateUser, IChaseStateUser, ICaughtPlayerStateUser
+public class Warden : Monster, IIdleStateUser, ISearchStateUser, IChaseStateUser, ICaughtPlayerStateUser, IDisappearStateUser
 {
     // Currently used by SteamDungeonHMAchievement to keep track of how many times the Warden spots the player
     public static event Action OnWardenSpottedPlayer;
@@ -24,6 +24,9 @@ public class Warden : Monster, IIdleStateUser, ISearchStateUser, IChaseStateUser
     private CaughtPlayerState _caughtPlayerState;
     public CaughtPlayerState caughtPlayerState => _caughtPlayerState;
 
+    private DisappearState _disappearState;
+    public DisappearState disappearState => _disappearState;
+
     private EntityState startState;
     protected override EntityState _startState => startState;
 
@@ -37,6 +40,7 @@ public class Warden : Monster, IIdleStateUser, ISearchStateUser, IChaseStateUser
     [SerializeField] private SearchState searchBehavior;
     [SerializeField] private ChaseState chaseBehavior;
     [SerializeField] private CaughtPlayerState caughtPlayerBehavior;
+    [SerializeField] private DisappearState disappearBehavior;
 
     [Header("Listening For Player Footsteps")]
     [Tooltip("If the path to the footstep audio cue is longer than this distance, the Warden will not move to the footstep audio position")]
@@ -149,6 +153,7 @@ public class Warden : Monster, IIdleStateUser, ISearchStateUser, IChaseStateUser
         _searchState = searchBehavior;
         _chaseState = chaseBehavior;
         _caughtPlayerState = caughtPlayerBehavior;
+        _disappearState = disappearBehavior;
 
         startState = searchState;
     }
@@ -442,7 +447,7 @@ public class Warden : Monster, IIdleStateUser, ISearchStateUser, IChaseStateUser
         }
     }
 
-    protected override void HandleOnMonsterCollidedWithPlayer(PlayerReferences playerReferences, Monster monster)
+    protected override void HandleKillPlayer(PlayerReferences playerReferences, Monster monster)
     {
         EnableDetectors(false);
 
@@ -461,6 +466,35 @@ public class Warden : Monster, IIdleStateUser, ISearchStateUser, IChaseStateUser
                 audioHandler.chaseMusicAudioSource.Stop();
             }
         }
+    }
+
+    protected override void HandleDamagePlayer(Monster monster)
+    {
+        if (monster != this)
+        {
+            return;
+        }
+
+        // Makes sure that if the Warden spots the player and the player runs into the Warden whilst the Warden is standing still,
+        // unexpected behavior does not occur as a result of the Warden teleporting, then officially starting to chase the player
+        if (beginChaseRoutine != null)
+        {
+            StopCoroutine(beginChaseRoutine);
+            beginChaseRoutine = null;
+
+            EnableDetectors(true);
+        }
+
+        stateMachine.ChangeState(disappearState);
+
+        ChangeLightColors(lightStartingColor);
+
+        audioHandler.chaseMusicAudioSource.Stop();
+        audioHandler.whistleAudioSource.Play();
+        audioHandler.drumbeatAudioSource.Play();
+        UpdateBreathingAudio(searchBreathing);
+
+        EnableLookAtTarget(false);
     }
 
     /// <summary>
